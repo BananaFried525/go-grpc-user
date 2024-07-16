@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package user_pb;
+
+option go_package = "bananaf/wallet/user/proto";
+
+
+message User {
+  string name = 1;
+  int32 age = 2;
+}
+
+service UserService {
+  rpc GetUser(User) returns (User);
+}
