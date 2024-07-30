@@ -1,14 +1,17 @@
 package main
 
 import (
-	"bananaf/wallet/user/boots"
-	"bananaf/wallet/user/config"
+	"github.com/bananafried525/wallet/user/config"
+	"github.com/bananafried525/wallet/user/database"
+	"github.com/bananafried525/wallet/user/server"
 )
 
 func main() {
 	config := config.Config{}
-	con, _ := config.NewConfig()
+	cfg, _ := config.New()
 
-	gs := boots.NewGrpcServer(con)
+	db := database.New(cfg)
+	gs := server.New(cfg, db)
+
 	gs.Start()
 }
