@@ -5,6 +5,9 @@ import (
 
 	"github.com/bananafried525/wallet/user/database"
 	"github.com/bananafried525/wallet/user/service"
+	"github.com/bananafried525/wallet/user/validator"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type userServer struct {
@@ -19,8 +22,11 @@ func New(db *database.Connection) userServer {
 }
 
 func (us userServer) GetUser(ctx context.Context, u *GetUserRequest) (*GetUserResponse, error) {
-
-	result := service.GetUser(us.db, service.GetUserRequest{ID: u.GetId()})
+	data, err := validator.GetUser(map[string]string{"id": u.GetId()})
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, err.Error())
+	}
+	result := service.GetUser(us.db, data)
 
 	return &GetUserResponse{
 		User: &GetUserResponse_User{

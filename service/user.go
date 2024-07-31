@@ -8,7 +8,7 @@ import (
 )
 
 type GetUserRequest struct {
-	ID string
+	ID string `validate:"required,number"`
 }
 
 type GetUserResponse struct {
@@ -18,7 +18,7 @@ type GetUserResponse struct {
 	ReferralCode string
 }
 
-func GetUser(db *database.Connection, req GetUserRequest) *GetUserResponse {
+func GetUser(db *database.Connection, req *GetUserRequest) *GetUserResponse {
 	dbTxn := db.Begin()
 
 	userId, err := strconv.ParseUint(req.ID, 10, 32)
